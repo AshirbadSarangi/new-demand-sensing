@@ -1,3 +1,62 @@
+interface weightSchema
+{
+  promotion:number,
+  price:number,
+  market:number,
+  weather:number,
+  events:number,
+  holiday:number,
+  macro:number,
+}
+
+
+export const tradWeight : weightSchema | any =
+{
+  promotion:0.08,
+  price:0.03,
+  market:0.04,
+  weather:0.02,
+  events:0.04,
+  holiday:0.04,
+  macro:0.01,
+}
+
+export const mlWeight : weightSchema | any =
+{
+  promotion:0.08,
+  price:0.03,
+  market:0.04,
+  weather:0.02,
+  events:0.04,
+  holiday:0.04,
+  macro:0.01,
+}
+
+export const dlWeight : weightSchema | any=
+{
+  promotion:0.08,
+  price:0.03,
+  market:0.04,
+  weather:0.02,
+  events:0.04,
+  holiday:0.04,
+  macro:0.01,
+}
+
+export const ensemWeight : weightSchema | any =
+{
+  promotion:0.08,
+  price:0.03,
+  market:0.04,
+  weather:0.02,
+  events:0.04,
+  holiday:0.04,
+  macro:0.01,
+}
+
+
+
+
 export const weeklyHist =
 [
      {

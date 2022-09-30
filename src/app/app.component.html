@@ -120,31 +120,91 @@
   
   <main>
 
+    <!-- Causal Factors-->
     <div style="display:flex;justify-content: space-between;">
-          <!-- Graph -->
-    <mat-card style="margin-top:20px;" class="w-60">
+      <!-- Graph -->
+      <mat-card style="margin-top:20px;height: fit-content;" class="w-100">
+        <div class="title-container">
+          <!-- <div class="card-heading">
+            <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #DD2366;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
+              <img src="assets/images/trending-graph.svg" style="transform:scale(1)">
+            </mat-card>
+          </div> -->
+          <div class="actual-heading">Causal Factors</div>
+        </div>
+        <br>
+
+        <div class="row">
+          <div class="col"><mat-checkbox class="example-margin" color="primary"  value="promotion" (change)="changePrecision($event)">Promotion</mat-checkbox></div>
+          <div class="col"><mat-checkbox class="example-margin" color="primary" value="price"  (change)="changePrecision($event)">Price</mat-checkbox></div>
+          <div class="col"><mat-checkbox class="example-margin" color="primary" value="market"  (change)="changePrecision($event)">Marketing</mat-checkbox></div>
+          <div class="col"><mat-checkbox class="example-margin" color="primary" value="weather"  (change)="changePrecision($event)">Weather</mat-checkbox></div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col"><mat-checkbox class="example-margin" color="primary" value="macro"  (change)="changePrecision($event)">Macro-Economic</mat-checkbox></div>
+          <div class="col"><mat-checkbox class="example-margin" color="primary" value="events"  (change)="changePrecision($event)">Events</mat-checkbox></div>
+          <div class="col"><mat-checkbox class="example-margin" color="primary" value="holiday"  (change)="changePrecision($event)">Holidays</mat-checkbox></div>
+          <div class="col">
+            <mat-checkbox class="example-margin" color="primary">
+              <mat-form-field appearance="legacy">
+                <mat-label>Enter Any Other</mat-label>
+                <input matInput>
+              </mat-form-field>
+            </mat-checkbox> &nbsp;&nbsp;
+          </div>
+        </div>  
+      </mat-card>
+
+      <!-- Forecast Summary -->
+      <!-- <mat-card style="margin-top:20px;" class="w-25">
+        <div class="actual-heading">Precision Levels</div>
+        <br>
+        <div class="demand-sensed-increament">{{(basePrecision * 100) | number:'1.0-2'}} %</div>
+      </mat-card> -->
+
+    </div>
+
+
+    <!-- Graphs, Accuracy and Forecasting -->
+    <div style="display:flex;justify-content: space-between;">
+    <!-- Graph -->
+    <mat-card style="margin-top:20px;width:40% !important;">
       <div class="title-container">
-        <div class="card-heading">
+        <!-- <div class="card-heading">
           <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #DD2366;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
             <img src="assets/images/trending-graph.svg" style="transform:scale(1)">
           </mat-card>
-        </div>
+        </div> -->
 
         <div style="display:flex;height:32px">
 
           <!-- Weekly, Monthly, Yearly Buttons -->
           <mat-button-toggle-group  [(ngModel)]="selectedChartPeriod" selected=weekly #group (change)="[print(selectedChartPeriod),appointDate()]"> 
-            <mat-button-toggle value="weekly" #weekly>W</mat-button-toggle>
-            <mat-button-toggle value="monthly">M</mat-button-toggle>
-            <mat-button-toggle value="quarterly">Q</mat-button-toggle>
+            <mat-button-toggle value="weekly" #weekly>H</mat-button-toggle>
+            <mat-button-toggle value="monthly">1D</mat-button-toggle>
+            <mat-button-toggle value="quarterly">3D</mat-button-toggle>
+            <mat-button-toggle value="quarterly">W</mat-button-toggle>
           </mat-button-toggle-group>
         </div>
       </div>
       
 
-      <div style="height:auto;">
+      <div style="height:fit-content;">
         <div echarts [options]="chartOption" class="demo-chart"></div>
       </div>
+    </mat-card>
+
+    <mat-card style="width:32%;margin-top:20px;">
+      <div class="forecast-heading"><span>Forecast Models</span><span>Accuracy</span> </div>
+      <br>
+      <div class="actual-model"><span>Traditional</span>    <span>{{(tradBase * 100) | number:'1.0-2'}}%</span></div>
+      <hr>
+      <div class="actual-model"><span>Machine Learning</span>    <span>{{(mlBase * 100) | number:'1.0-2'}}%</span></div>
+      <hr>
+      <div class="actual-model"><span>Deep Learning</span>    <span>{{(dlBase * 100) | number:'1.0-2'}}%</span></div>
+      <hr>
+      <div class="actual-model" style="color:#06f9d9;font-weight: 600;"><span>Ensemble</span>    <span>{{(ensemBase * 100) | number:'1.0-2'}}%</span></div>
     </mat-card>
 
     <!-- Forecast Summary -->
@@ -155,9 +215,10 @@
         <div class="actual-data">{{actual2022}} mn <span style="font-size:16px;font-family: 'Comfortaa';">({{minorPeriod}}) [2022]</span></div>
     
         <hr>
+        <br>
         <div class="actual-heading">Forecast</div>
-        <div class="actual-data">{{forecast}} mn</div>
-        <div class="demand-sensed-increament">{{(forecast/actual2022*100) - 100 | number:'1.0-2'}} %</div>
+        <div class="demand-sensed-increament" style="color:#53D6C4">{{forecast}} mn</div>
+        <!-- <div class="demand-sensed-increament">{{(forecast/actual2022*100) - 100 | number:'1.0-2'}} %</div> -->
       </div>
 
 
@@ -169,36 +230,32 @@
     
     <!-- Insights -->
     <mat-card style="margin-top:20px;">
-      <div class="title-container">
-        <div class="card-heading">
+      <!-- <div class="title-container"> -->
+        <!-- <div class="card-heading">
           <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #46A24A;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
             <img src="assets/images/insights-graph.svg" style="transform:scale(1)">
           </mat-card>
-        </div>
-      </div>
+        </div> -->
+      <!-- </div> -->
      
       <div style="display:flex;justify-content: space-around;">
         <mat-card class="insight-card">
           <div class="stats-figure">{{salesIncreament}}%</div>      
-          <br>
           <div class="stats-desc">Increament in sales quantity over the last {{period}}</div>    
         </mat-card>
 
         <mat-card class="insight-card">
           <div class="stats-figure">{{impressionsIncreament}}%</div>      
-          <br>
           <div class="stats-desc">Increament in sales revenue over the last {{period}}</div>    
         </mat-card>
 
         <mat-card class="insight-card">
           <div class="stats-figure">{{revenuesIncreament}}%</div>      
-          <br>
           <div class="stats-desc">Increament in gross profit over the last {{period}}</div>    
         </mat-card>
 
         <mat-card class="insight-card">
           <div class="stats-figure" style="color:#DD2366;">{{workforceIncreament}}%</div>      
-          <br>
           <div class="stats-desc">Decreament in workforce over the last {{period}}</div>    
         </mat-card>
       </div>
@@ -208,11 +265,11 @@
     <!-- Table -->
     <mat-card style="margin-top:20px;">
       <div class="title-container">
-        <div class="card-heading">
+        <!-- <div class="card-heading">
           <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #257EEA;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
             <img src="assets/images/grid-table.svg" style="transform:scale(1)">
           </mat-card>
-        </div>
+        </div> -->
         
 
       <div style="display:flex;height:32px">

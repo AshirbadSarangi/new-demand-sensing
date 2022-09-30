@@ -4,6 +4,7 @@ import {ThemePalette} from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EChartsOption } from 'echarts';
 import  { weeklyForecast, weeklyHist, monthlyForecast, monthlyHist, quaterlyForecast, quaterlyHist} from './const_file';
+import  { tradWeight, mlWeight, dlWeight, ensemWeight } from './const_file';
 
 
 export interface Task {
@@ -55,6 +56,20 @@ export class AppComponent implements DoCheck {
     }
   )
 
+  promotionWt = false;
+  priceWt = false;
+  marketingWt = false;
+  weatherWt = false;
+  eventsWt = false;
+  holidaysWt = false;
+
+  tradBase = 0.7;
+  mlBase = 0.85;
+  dlBase = 0.80;
+  ensemBase = 0.86;
+  
+  basePrecision:number = 0.7;
+
   salesIncreament:number = 1.32;
   impressionsIncreament:number = 4.38;
   revenuesIncreament:number = 1.37;
@@ -77,11 +92,11 @@ export class AppComponent implements DoCheck {
   },
   series: [
     {
-      data: this.weeklyHist.map(c => c[" Revenue "]),
+      data: this.weeklyHist.map(c => c[" Revenue "]/10000),
       type: 'line',
     },
     {
-      data: Array(this.weeklyHist.length - 1 ).concat(this.weeklyForecast.map(c => c[" Revenue "])),
+      data: Array(this.weeklyHist.length - 1 ).concat(this.weeklyForecast.map(c => c[" Revenue "]/10000)),
       type: 'line',
     },
   ],
@@ -96,11 +111,11 @@ export class AppComponent implements DoCheck {
     },
     series: [
       {
-        data: this.weeklyHist.map(c => c[" Revenue "]),
+        data: this.weeklyHist.map(c => c[" Revenue "]/10000),
         type: 'line',
       },
       {
-        data: Array(this.weeklyHist.length - 1 ).concat(this.weeklyForecast.map(c => c[" Revenue "])),
+        data: Array(this.weeklyHist.length - 1 ).concat(this.weeklyForecast.map(c => c[" Revenue "]/10000)),
         type: 'line',
       },
     ],
@@ -115,11 +130,11 @@ export class AppComponent implements DoCheck {
     },
     series: [
       {
-        data: this.monthlyHist.map(c => c["revenue"]),
+        data: this.monthlyHist.map(c => c["revenue"]/10000),
         type: 'line',
       },
       {
-        data: Array(this.monthlyHist.length - 1).fill('-').concat(this.monthlyForecast.map(c => c["revenue"].toString())),
+        data: Array(this.monthlyHist.length - 1).fill('-').concat(this.monthlyForecast.map(c => (c["revenue"]/10000).toString())),
         type: 'line',
       }
     ],
@@ -138,11 +153,32 @@ export class AppComponent implements DoCheck {
         type: 'line',
       },
       {
-        data: Array(this.quaterlyHist.length -1).fill('-').concat(this.quaterlyForecast.map(c => c["revenue"].toString())),
+        data: Array(this.quaterlyHist.length -1).fill('-').concat(this.quaterlyForecast.map(c => (c["revenue"]/10000).toString())),
         type: 'line',
       }
     ],
   };
+
+  changePrecision(event?:any)
+  {
+    // const p = event.source.value
+    // console.log(tradWeight[p])
+    if(event.checked) 
+    {
+      this.tradBase = this.tradBase + tradWeight[event.source.value.toString()] 
+      this.mlBase = this.mlBase + mlWeight[event.source.value] 
+      this.dlBase = this.dlBase + dlWeight[event.source.value] 
+      this.ensemBase = this.ensemBase + ensemWeight[event.source.value] 
+    }
+    else
+    {
+      this.tradBase = this.tradBase - tradWeight[event.source.value] 
+      this.mlBase = this.mlBase - mlWeight[event.source.value] 
+      this.dlBase = this.dlBase - dlWeight[event.source.value] 
+      this.ensemBase = this.ensemBase - ensemWeight[event.source.value] 
+    } 
+   
+  }
 
   openSnackBar(message: string, action: string) {
     this._snackBar.open(message, action);
