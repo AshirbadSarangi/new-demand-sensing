@@ -84,7 +84,7 @@
     </mat-expansion-panel>
 
     <!-- Historical Duration -->
-    <mat-expansion-panel class="expansion-tweaks">
+    <!-- <mat-expansion-panel class="expansion-tweaks">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Historical Duration
@@ -99,21 +99,18 @@
       </mat-radio-button>
 
     </mat-radio-group>
-  </mat-expansion-panel>
+  </mat-expansion-panel> -->
 
     <!-- Datepicker -->
-    <mat-form-field appearance="outline" class="date-tweaks" (click)="picker.open()">
-      <mat-label style="color:white">Start Date</mat-label>
-      <input matInput [matDatepicker]="picker">
-      <mat-hint style="color:white">MM/DD/YYYY</mat-hint>
-      <mat-datepicker #picker></mat-datepicker>
-    </mat-form-field>
+    <mat-form-field appearance="legacy" class="date-tweaks" (click)="picker.open()">
+      <mat-label style="color:white;">Enter a date range</mat-label>
+      <mat-date-range-input [formGroup]="dateRangeTrend" [rangePicker]="picker">
+        <input matStartDate formControlName="startDate" placeholder="Start date">
+        <input matEndDate formControlName="endDate" placeholder="End date">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-date-range-picker #picker></mat-date-range-picker>
     
-    <mat-form-field appearance="outline" class="date-tweaks" (click)="endpicker.open()">
-      <mat-label style="color:white">End Date</mat-label>
-      <input matInput [matDatepicker]="endpicker">
-      <mat-hint style="color:white">MM/DD/YYYY</mat-hint>
-      <mat-datepicker #endpicker></mat-datepicker>
     </mat-form-field>
 
   </aside>
@@ -163,9 +160,16 @@
           <div class="actual-data">{{actual2021}} mn <span style="font-size:12px;font-family: 'Comfortaa';">({{minorPeriod}}) [2021]</span></div>
           <div class="actual-data">{{actual2022}} mn <span style="font-size:12px;font-family: 'Comfortaa';">({{minorPeriod}}) [2022]</span></div>
           <hr>
-          <div class="actual-heading">Forecast</div>
-          <div class="demand-sensed-increament" style="color:#53D6C4">{{(ensemBase * 100) | number:'1.0-2'}} %</div>
-          <!-- <div class="demand-sensed-increament">{{(forecast/actual2022*100) - 100 | number:'1.0-2'}} %</div> -->
+          <div class="w-100" style="display:flex">
+            <div class="w-50">
+              <div class="actual-heading">Forecast</div>
+              <div class="demand-sensed-increament">{{(forecast/actual2022*100) - 100 | number:'1.0-2'}} %</div>    
+            </div>
+            <div class="w-50">
+              <div class="actual-heading">Accuracy</div>
+              <div class="demand-sensed-increament" style="color:#53D6C4">{{(ensemBase * 100) | number:'1.0-2'}} %</div>
+            </div>
+          </div>
         </div>
   
       </mat-card>
@@ -204,7 +208,7 @@
       <!-- Accuracy Summary -->
       <mat-card style="margin-top:20px;" class="w-25">
         <div class="forecast-heading"><span>Forecast Models</span><span>Accuracy</span> </div>
-        <br>
+        <br><br>
         <div class="actual-model"><span>Traditional</span>    <span>{{(tradBase * 100) | number:'1.0-2'}}%</span></div>
         <hr>
         <div class="actual-model"><span>Machine Learning</span>    <span>{{(mlBase * 100) | number:'1.0-2'}}%</span></div>

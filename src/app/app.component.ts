@@ -63,10 +63,10 @@ export class AppComponent implements DoCheck {
   eventsWt = false;
   holidaysWt = false;
 
-  tradBase = 0.7;
-  mlBase = 0.85;
-  dlBase = 0.80;
-  ensemBase = 0.86;
+  tradBase = 0.5;
+  mlBase = 0.65;
+  dlBase = 0.60;
+  ensemBase = 0.66;
   
   basePrecision:number = 0.7;
 

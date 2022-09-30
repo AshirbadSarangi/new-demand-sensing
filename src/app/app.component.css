@@ -270,3 +270,29 @@ ul {
   font-size:14px;
 }
 
+::ng-deep .date-tweaks .mat-focused .mat-form-field-label {
+  /*change color of label*/
+  color: white !important;
+ }
+ 
+ ::ng-deep .date-tweaks .mat-form-field-underline {
+  /*change color of underline*/
+  background-color: white !important;
+ } 
+ 
+ ::ng-deep .date-tweaks .mat-form-field-ripple {
+  /*change color of underline when focused*/
+  background-color: white !important;;
+ }
+ 
+ ::ng-deep .date-tweaks .mat-form-field-label {
+  /*change color of label*/
+  color: white !important;
+ }
+ 
+ 
+ mat-datepicker-toggle {
+  color: white !important;
+ }
+
+ ::ng-deep .mat-date-range-input-separator {color:white}
