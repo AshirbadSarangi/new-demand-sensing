@@ -1,0 +1,13 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; width:100% !important;; }
+
+body 
+{ 
+    margin: 0; 
+    background-color:#F0F2F5 ;
+    font-family: 'Akaya Kanadaka', cursive !important; 
+    font-size:14px !important; 
+    transition:0.2s;
+}
+ 
