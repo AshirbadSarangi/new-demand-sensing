@@ -197,11 +197,10 @@ ul {
 
 .actual-model
 {
-  /* margin:1%; */
   display:flex;
   justify-content: space-between;
   font-family: 'Comfortaa', cursive;
-  font-size:14px;
+  font-size:16px;
   padding:3%;
   padding-bottom:0;
   padding-top:0;
@@ -214,8 +213,8 @@ ul {
   margin-left:3%;
   transition:0.3s;
   font-size:16px;
-  /* background-color: rgba(143, 140, 139, 0.273); */
   border-radius: 5px;;
+  margin-right:3%;
 }
 
 .w-60
@@ -235,7 +234,8 @@ ul {
  text-align: center;
  transition:0.3s;
  cursor:pointer;
-
+ font-size:26px;
+ margin:0;
 
 } 
 
@@ -251,7 +251,7 @@ ul {
 {
   text-align:center;
   font-family: 'Anton', sans-serif;
-  font-size:28px;
+  font-size:18px;
 }
 
 .forecast-heading
@@ -259,7 +259,7 @@ ul {
   text-align:left;
   display:flex;
   justify-content: space-between;
-  font-size:24px;
+  font-size:16px;
 
 }
 
@@ -267,6 +267,6 @@ ul {
 {
   text-align:center;
   font-family: 'Alfa Slab One', cursive;
-  font-size:20px;
+  font-size:14px;
 }
 
