@@ -83,24 +83,7 @@
     </mat-radio-group>
     </mat-expansion-panel>
 
-    <!-- Historical Duration -->
-    <!-- <mat-expansion-panel class="expansion-tweaks">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Historical Duration
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-radio-group
-      aria-labelledby="example-radio-group-label"
-      class="radio-group"
-      [(ngModel)]="chosenHistPeriod">
-      <mat-radio-button class="radio-button" color="primary" *ngFor="let histDuration of histDurations" [value]="histDuration">
-        {{histDuration}}
-      </mat-radio-button>
-
-    </mat-radio-group>
-  </mat-expansion-panel> -->
-
+  
     <!-- Datepicker -->
     <mat-form-field appearance="legacy" class="date-tweaks" (click)="picker.open()">
       <mat-label style="color:white;">Enter a date range</mat-label>
@@ -117,111 +100,104 @@
   
   <main>
 
-    <!-- Causal Factors and Forecast -->
-    <div style="display:flex;margin-top:20px;justify-content: space-between;height:fit-content;">
-      <!-- Causal Factors -->
-      <mat-card style="height:100%;width:73.5%;">
-        <div class="title-container">
-          <!-- <div class="card-heading">
-            <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #DD2366;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
-              <img src="assets/images/trending-graph.svg" style="transform:scale(1)">
-            </mat-card>
-          </div> -->
-          <div class="actual-heading">Causal Factors</div>
-        </div>
-        <br>
+    <div style="display:flex;justify-content: space-between;margin-top:20px;">
+    
+      <!-- Causal Factors and Graph -->
+      <div style="height:fit-content;width:73.5%">
 
-        <div class="row">
-          <div class="col"><mat-checkbox class="example-margin" color="primary"  value="promotion" (change)="changePrecision($event)">Promotion</mat-checkbox></div>
-          <div class="col"><mat-checkbox class="example-margin" color="primary" value="price"  (change)="changePrecision($event)">Price</mat-checkbox></div>
-          <div class="col"><mat-checkbox class="example-margin" color="primary" value="market"  (change)="changePrecision($event)">Marketing</mat-checkbox></div>
-          <div class="col"><mat-checkbox class="example-margin" color="primary" value="weather"  (change)="changePrecision($event)">Weather</mat-checkbox></div>
-        </div>
-        <br>
-        <div class="row">
-          <div class="col"><mat-checkbox class="example-margin" color="primary" value="macro"  (change)="changePrecision($event)">Macro-Economic</mat-checkbox></div>
-          <div class="col"><mat-checkbox class="example-margin" color="primary" value="events"  (change)="changePrecision($event)">Events</mat-checkbox></div>
-          <div class="col"><mat-checkbox class="example-margin" color="primary" value="holiday"  (change)="changePrecision($event)">Holidays</mat-checkbox></div>
-          <div class="col">
-            <mat-checkbox class="example-margin" color="primary">
-              <mat-form-field appearance="legacy">
-                <mat-label>Enter Any Other</mat-label>
-                <input matInput>
-              </mat-form-field>
-            </mat-checkbox> &nbsp;&nbsp;
+        <!-- Causal Factors -->
+        <mat-card>
+          <div class="title-container">
+            <!-- <div class="card-heading">
+              <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #DD2366;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
+                <img src="assets/images/trending-graph.svg" style="transform:scale(1)">
+              </mat-card>
+            </div> -->
+            <div class="actual-heading">Causal Factors</div>
           </div>
-        </div>  
-      </mat-card>
+          <br>
 
-      <!-- Forecast -->
-      <mat-card style="height:inherit" class="w-25">
-        <div>
-          <div class="actual-heading">Actual</div>
-          <div class="actual-data">{{actual2021}} mn <span style="font-size:12px;font-family: 'Comfortaa';">({{minorPeriod}}) [2021]</span></div>
-          <div class="actual-data">{{actual2022}} mn <span style="font-size:12px;font-family: 'Comfortaa';">({{minorPeriod}}) [2022]</span></div>
-          <hr>
-          <div class="w-100" style="display:flex">
-            <div class="w-50">
-              <div class="actual-heading">Forecast</div>
-              <div class="demand-sensed-increament">{{(forecast/actual2022*100) - 100 | number:'1.0-2'}} %</div>    
-            </div>
-            <div class="w-50">
-              <div class="actual-heading">Accuracy</div>
-              <div class="demand-sensed-increament" style="color:#53D6C4">{{(ensemBase * 100) | number:'1.0-2'}} %</div>
-            </div>
+          <div class="row">
+            <div class="col"><mat-checkbox class="example-margin" color="primary"  value="promotion" (change)="changePrecision($event)">Promotion</mat-checkbox></div>
+            <div class="col"><mat-checkbox class="example-margin" color="primary" value="price"  (change)="changePrecision($event)">Price</mat-checkbox></div>
+            <div class="col"><mat-checkbox class="example-margin" color="primary" value="market"  (change)="changePrecision($event)">Marketing</mat-checkbox></div>
+            <div class="col"><mat-checkbox class="example-margin" color="primary" value="weather"  (change)="changePrecision($event)">Weather</mat-checkbox></div>
           </div>
-        </div>
-  
-      </mat-card>
-    </div>
+          <br>
+          <div class="row">
+            <div class="col"><mat-checkbox class="example-margin" color="primary" value="macro"  (change)="changePrecision($event)">Macro-Economic</mat-checkbox></div>
+            <div class="col"><mat-checkbox class="example-margin" color="primary" value="events"  (change)="changePrecision($event)">Events</mat-checkbox></div>
+            <div class="col"><mat-checkbox class="example-margin" color="primary" value="holiday"  (change)="changePrecision($event)">Holidays</mat-checkbox></div>
+            <div class="col"><mat-checkbox class="example-margin" color="primary" value="others"  (change)="changePrecision($event)">Others</mat-checkbox></div>
 
-
-    <!-- Graphs and Model Accuracy -->
-    <div style="display:flex;justify-content: space-between;">
-      <!-- Graph -->
-      <mat-card style="margin-top:20px;width:73.5% !important;">
-        <div class="title-container">
-          <!-- <div class="card-heading">
-            <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #DD2366;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
-              <img src="assets/images/trending-graph.svg" style="transform:scale(1)">
-            </mat-card>
-          </div> -->
-
-          <div style="display:flex;height:32px">
-
-            <!-- Weekly, Monthly, Yearly Buttons -->
-            <mat-button-toggle-group  [(ngModel)]="selectedChartPeriod" selected=weekly #group (change)="[print(selectedChartPeriod),appointDate()]"> 
-              <mat-button-toggle value="weekly" #weekly>H</mat-button-toggle>
-              <mat-button-toggle value="monthly">1D</mat-button-toggle>
-              <mat-button-toggle value="quarterly">3D</mat-button-toggle>
-              <mat-button-toggle value="quarterly">W</mat-button-toggle>
-            </mat-button-toggle-group>
-          </div>
-        </div>
+          </div>  
+        </mat-card>
         
+        <!-- Graph -->
+        <mat-card style="margin-top:20px;">
+          <div class="title-container">
+            <div style="display:flex;height:32px">
 
-        <div style="height:fit-content;">
-          <div echarts [options]="chartOption" class="demo-chart"></div>
-        </div>
-      </mat-card>
+              <!-- Weekly, Monthly, Yearly Buttons -->
+              <mat-button-toggle-group  [(ngModel)]="selectedChartPeriod" #group (change)="[print(selectedChartPeriod),appointDate()]"> 
+                <mat-button-toggle matToolTip="Hourly" value="hourly" #hourly>H</mat-button-toggle>
+                <mat-button-toggle matToolTip="Daily" value="daily">D</mat-button-toggle>
+                <mat-button-toggle matToolTip="Weekly" value="weekly">W</mat-button-toggle>
+              </mat-button-toggle-group>
+            </div>
+          </div>
+          
 
-      <!-- Accuracy Summary -->
-      <mat-card style="margin-top:20px;" class="w-25">
-        <div class="forecast-heading"><span>Forecast Models</span><span>Accuracy</span> </div>
-        <br><br>
-        <div class="actual-model"><span>Traditional</span>    <span>{{(tradBase * 100) | number:'1.0-2'}}%</span></div>
-        <hr>
-        <div class="actual-model"><span>Machine Learning</span>    <span>{{(mlBase * 100) | number:'1.0-2'}}%</span></div>
-        <hr>
-        <div class="actual-model"><span>Deep Learning</span>    <span>{{(dlBase * 100) | number:'1.0-2'}}%</span></div>
-        <hr>
-        <div class="actual-model" style="color:#06f9d9;font-weight: 600;"><span>Ensemble</span>    <span>{{(ensemBase * 100) | number:'1.0-2'}}%</span></div>
-      
+          <div style="height:fit-content;margin-top:2%;">
+            <div echarts [options]="chartOption" class="demo-chart"></div>
+          </div>
+        </mat-card>
 
+      </div>
 
-      </mat-card>
+      <!-- Forecast and Accuracy Summary -->
+      <div style="height:fit-content;" class="w-25">
+
+        <!-- Forecast -->
+        <mat-card style="height:inherit">
+          <div>
+            <div class="actual-heading">Actual</div>
+            <div class="actual-data">$ {{actual2021/1000000 | number:'1.0-2'}} mn <span style="font-size:12px;font-family: 'Comfortaa';">{{prevTime}}</span></div>
+            <div class="actual-data">$ {{actual2022/1000000 | number:'1.0-2'}} mn <span style="font-size:12px;font-family: 'Comfortaa';">{{presTime}}</span></div>
+            <hr>
+            <div class="w-100" style="display:flex">
+              <div class="w-50">
+                <div class="actual-heading">Forecast</div>
+                <div class="demand-sensed-increament">{{forecast/1000000 | number:'1.0-2'}} mn <img [src]="arrowIcon" style="height:15px;"></div>    
+              </div>
+              <div class="w-50">
+                <div class="actual-heading">Accuracy</div>
+                <div class="demand-sensed-increament" style="color:#53D6C4">{{(ensemBase * 100) | number:'1.0-2'}} %</div>
+              </div>
+            </div>
+          </div>
+    
+        </mat-card>
+
+        <!-- Accuracy Summary -->
+        <mat-card style="margin-top:20px;">
+          <div class="forecast-heading"><span>Forecast Models</span><span>Accuracy</span> </div>
+          <br><br>
+          <div class="actual-model"><span><img [src]="plusIcon" style="height:15px;margin-right:5px;">Traditional</span>    <span>{{(tradBase * 100) | number:'1.0-2'}}%</span></div>
+          <hr>
+          <div class="actual-model"><span><img [src]="plusIcon" style="height:15px;margin-right:5px;">Machine Learning</span>    <span>{{(mlBase * 100) | number:'1.0-2'}}%</span></div>
+          <hr>
+          <div class="actual-model"><span><img [src]="plusIcon" style="height:15px;margin-right:5px;">Deep Learning</span>    <span>{{(dlBase * 100) | number:'1.0-2'}}%</span></div>
+          <hr>
+          <div class="actual-model" style="color:#06f9d9;font-weight: 600;"><span><img [src]="plusIcon" style="height:15px;margin-right:5px;">Ensemble</span>    <span>{{(ensemBase * 100) | number:'1.0-2'}}%</span></div>
+        </mat-card>
+
+      </div>
+
 
     </div>
+
+
 
 
     
@@ -261,50 +237,11 @@
 
     <!-- Table -->
     <mat-card style="margin-top:20px;">
-      <div class="title-container">
-        <!-- <div class="card-heading">
-          <mat-card  style=" transform:scale(0.5) ;top:-50px;background-color: #257EEA;height:fit-content;box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;">
-            <img src="assets/images/grid-table.svg" style="transform:scale(1)">
-          </mat-card>
-        </div> -->
-        
-
-      <div style="display:flex;height:32px">
-
-        <!-- Datepickers -->
-        <!-- <mat-form-field appearance="outline">
-          <mat-label>Enter a date range</mat-label>
-          <mat-date-range-input [formGroup]="dateRangeTable" [rangePicker]="tablepicker"  id="tableRange" name="tableRange">
-            <input matStartDate name="inputStartDate" formControlName="startDate" placeholder="Start date">
-            <input matEndDate name="inputEndDate" formControlName="endDate" placeholder="End date">
-          </mat-date-range-input>
-          <mat-datepicker-toggle matSuffix [for]="tablepicker"></mat-datepicker-toggle>
-          <mat-date-range-picker #tablepicker>
-            <mat-datepicker-actions>
-              <button mat-button matDatepickerCancel>Cancel</button>
-              <button mat-raised-button color="primary" matDatepickerApply>Apply</button>
-            </mat-datepicker-actions>
-          </mat-date-range-picker>
-          <mat-error *ngIf="dateRangeTable.controls.startDate.hasError('matStartDateInvalid')">Invalid start date</mat-error>
-          <mat-error *ngIf="dateRangeTable.controls.endDate.hasError('matEndDateInvalid')">Invalid end date</mat-error>
-        </mat-form-field> -->
-        
-        <!-- &nbsp;&nbsp; -->
-
-        <!-- Weekly, Monthly, Yearly Buttons -->
-        <!-- <mat-button-toggle-group  [(ngModel)]="selectedTablePeriod"  selected=weekly #group (change)="print(selectedTablePeriod)"> 
-          <mat-button-toggle value="weekly" #weekly>W</mat-button-toggle>
-          <mat-button-toggle value="monthly">M</mat-button-toggle>
-          <mat-button-toggle value="quarterly">Q</mat-button-toggle>
-        </mat-button-toggle-group> -->
-
-        
-        <button mat-raised-button color="primary" style="padding-bottom:38px;" (click)="openSnackBar(message, action)">Submit</button>
-      </div>
-      
+      <div class="title-container" style="justify-content:flex-end">
+        <button mat-raised-button color="primary" style="padding-bottom:38px;" (click)="openSnackBar(message, action)">Submit</button>      
     </div>
      
-      <table style="margin-top:5%;">
+      <table style="margin-top:2%;">
         <thead>
           <th>CATEGORIES</th>
           <th>FY 2021</th>
@@ -317,10 +254,10 @@
         <tbody>
           <tr>
             <td>Category 1</td>
-            <td>12,034,324</td>
-            <td>13,435,252</td>
-            <td>98,948,983</td>
-            <td>{{(98948983/13435252) | number:'1.0-2'}}%</td>
+            <td>4,034,324</td>
+            <td>5,435,252</td>
+            <td>8,948,983</td>
+            <td style="color:#53D6C4;font-weight: 600;">{{(8948983/((4034324+5435252)/2)*10) | number:'1.0-2'}}%</td>
             <td>
               <mat-radio-group id="approval-status" aria-label="Select an option">
                 <mat-radio-button value="1" color="primary">Yes</mat-radio-button>&nbsp;&nbsp;
@@ -330,10 +267,10 @@
           </tr>
           <tr>
             <td>Category 2</td>
-            <td>12,034,324</td>
-            <td>13,435,252</td>
+            <td>12,064,792</td>
+            <td>13,335,912</td>
             <td>98,948,983</td>
-            <td>{{(98948983/13435252) | number:'1.0-2'}}%</td>
+            <td style="color:#53D6C4;font-weight: 600;">{{(98948983*2/(13335912 + 12064792))*10 | number:'1.0-2'}}%</td>
             <td>
               <mat-radio-group id="approval-status" aria-label="Select an option">
                 <mat-radio-button value="1" color="primary">Yes</mat-radio-button>&nbsp;&nbsp;
@@ -343,10 +280,10 @@
           </tr>
           <tr>
             <td>Category 3</td>
-            <td>12,034,324</td>
-            <td>13,435,252</td>
-            <td>98,948,983</td>
-            <td>{{(98948983/13435252) | number:'1.0-2'}}%</td>
+            <td>2,124,014</td>
+            <td>8,415,782</td>
+            <td>10,948,983</td>
+            <td style="color:#53D6C4;font-weight: 600;">{{(10948983*2/(2124014 + 8415782))*10 | number:'1.0-2'}}%</td>
             <td>
               <mat-radio-group id="approval-status" aria-label="Select an option">
                 <mat-radio-button value="1" color="primary">Yes</mat-radio-button>&nbsp;&nbsp;
