@@ -168,7 +168,7 @@
             <div class="w-100" style="display:flex">
               <div class="w-50">
                 <div class="actual-heading">Forecast</div>
-                <div class="demand-sensed-increament">{{forecast/1000000 | number:'1.0-2'}} mn <img [src]="arrowIcon" style="height:15px;"></div>    
+                <div class="demand-sensed-increament">{{forecast*forecastBase/1000000 | number:'1.0-2'}} mn <img [src]="arrowIcon" style="height:15px;"></div>    
               </div>
               <div class="w-50">
                 <div class="actual-heading">Accuracy</div>
