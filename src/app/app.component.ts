@@ -43,7 +43,7 @@ export class AppComponent implements DoCheck {
   mlBase = 0.65;
   dlBase = 0.60;
   ensemBase = 0.66;
-
+  forecastBase = 1;
   prevTime:string = ""
   presTime:string = ""
   
@@ -177,6 +177,9 @@ export class AppComponent implements DoCheck {
       this.dlBase = this.dlBase - dlWeight[event.source.value] 
       this.ensemBase = this.ensemBase - ensemWeight[event.source.value] 
     } 
+
+    if(this.ensemBase > 0.66) this.forecastBase =  1 + this.ensemBase/10
+    else this.forecastBase = 1
    
   }
 
@@ -327,11 +330,11 @@ appointDate()
     this.impressionsIncreament = 5.38;
     this.revenuesIncreament = 5.37;
     this.workforceIncreament = 1.62;
-    let weeklyHist = this.weeklyHist.slice(0,3).concat
+    let weeklyHist = this.weeklyHist.slice(0,4).concat
     (
       {
         "week": "04-10-2021",
-        "revenue": 1819564.9079999998
+        "revenue": 1819564.90
       },
       {
         "week": "11-10-2021",
@@ -343,7 +346,11 @@ appointDate()
       },
       {
         "week": "25-10-2021",
-        "revenue": 1902071.2629999998
+        "revenue": 1902071.26
+      },
+      {
+        "week": "25-10-2021",
+        "revenue": 1902071.26
       },
     )
     answerHist = this.findSum(weeklyHist,2,'obj');
