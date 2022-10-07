@@ -65,6 +65,11 @@ header
   font-size: 20px;
 }
 
+#hr-tag
+{
+  margin-top:5px;
+  margin-bottom:5px;
+}
 .card-heading
 {
   font-size:20px;

@@ -17,9 +17,9 @@ export const tradWeight : weightSchema | any =
   price:0.03,
   market:0.04,
   weather:0.02,
+  macro:0.01,
   events:0.04,
   holiday:0.04,
-  macro:0.01,
   others:0.01
 }
 
