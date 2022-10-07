@@ -1,10 +1,12 @@
-import { Component, DoCheck, OnInit } from '@angular/core';
+import { Component, DoCheck, Inject, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import {ThemePalette} from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { EChartsOption } from 'echarts';
 import  { weeklyForecast, weeklyHist, dailyHist, dailyForecast, hourlyHist, hourlyForecast} from './const_file';
 import  { tradWeight, mlWeight, dlWeight, ensemWeight } from './const_file';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { timestamp } from 'rxjs';
 
 
 export interface Task {
@@ -14,16 +16,24 @@ export interface Task {
   subcategories?: Task[];
 }
 
+
+export interface DialogData {
+  chosen:string,
+  value : number
+}
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements DoCheck {
+export class AppComponent implements DoCheck{
   
   title = 'Demand Demo';
   message = "Responses Recorded"
   action = "Close"
+
+  today= new Date()
 
   weeklyHist = weeklyHist
   weeklyForecast = weeklyForecast
@@ -58,6 +68,11 @@ export class AppComponent implements DoCheck {
   forecast:number = 14
   selectedChartPeriod:string = "hourly"
   selectedTablePeriod:string = ""
+
+  forecastedPeriod:string = "2d"
+
+  startDate : any  =  'Oct 07 2022' 
+  endDate : any  = ' Oct 09 2022 '
 
   plusIcon = "https://cdn3.iconfinder.com/data/icons/top-search-9/1024/plus-1024.png"
   arrowIcon = "https://cdn2.iconfinder.com/data/icons/flat-style-svg-icons-part-1/512/raise_wage_rise_upraise_upgrade-1024.png"
@@ -138,11 +153,18 @@ export class AppComponent implements DoCheck {
   constructor
   (
     private _formBuilder:FormBuilder,
-    private _snackBar: MatSnackBar
+    private _snackBar: MatSnackBar,
+    private dialog : MatDialog
   )
   {}
 
+  openDialog(name:string, weight:number): void {
+    const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
+      width: '500px',
+      data: {chosen : name, value : weight },
+    });
 
+  }
 
   dateRangeTrend = this._formBuilder.group
   (
@@ -160,6 +182,47 @@ export class AppComponent implements DoCheck {
     }
   )
 
+    changeBase(): void {
+
+      this.tradBase = 0.5;
+      this.mlBase = 0.65;
+      this.dlBase = 0.60;
+      this.ensemBase = 0.66;
+
+      if(this.dateRangeTrend.value.startDate && this.dateRangeTrend.value.endDate) 
+      {
+        this.tradBase = this.tradBase + 
+        tradWeight['promotion'] + tradWeight['market'] + tradWeight['weather'] +  tradWeight['macro']
+        +  tradWeight['price'] 
+  
+        this.mlBase = this.mlBase + 
+        mlWeight['promotion'] + mlWeight['market'] + mlWeight['weather'] +  mlWeight['macro']
+        +  mlWeight['price'] 
+  
+        this.dlBase = this.dlBase + 
+        dlWeight['promotion'] + dlWeight['market'] + dlWeight['weather'] +  dlWeight['macro']
+        +  dlWeight['price'] 
+  
+        this.ensemBase = this.ensemBase + 
+        ensemWeight['promotion'] + ensemWeight['market'] + ensemWeight['weather'] +  ensemWeight['macro']
+        +  ensemWeight['price'] 
+      }
+
+    }
+
+  formatDate(passedDate:string|undefined|null)
+  {
+    if(passedDate)  return (passedDate.toString().slice(4,15))
+    else return ;
+  }
+
+  findChecked()
+  {
+    let checked = false
+    if(this.dateRangeTrend.value.startDate && this.dateRangeTrend.value.endDate) checked = true;
+
+    return checked
+  }
  
   changePrecision(event?:any)
   {
@@ -196,9 +259,9 @@ export class AppComponent implements DoCheck {
   products: string[] = ['Product 1', 'Product 2', 'Product 3', 'Product 4'];
   forecastPeriods= 
   [
-    {name :'Hourly', value: 'hourly'},
-    {name :'Daily', value :'daily'},
-    {name :'Weekly', value :'weekly'},
+    {name :'Two Days', value: '2d'},
+    {name :'One Week', value :'1w'},
+    {name :'Two Week', value :'2w'},
   ]
 
 showFiller = false;
@@ -248,6 +311,19 @@ setAll(completed: boolean) {
 ngDoCheck()
 {
   this.appointDate()
+}
+
+forecastDate()
+{
+  this.startDate = new Date()
+  if(this.forecastedPeriod == '2d') this.endDate = new Date().getDate() + 2
+  if(this.forecastedPeriod == '1w') this.endDate = new Date().getDate() + 7
+  if(this.forecastedPeriod == '2w') this.endDate = new Date().getDate() + 14
+
+  this.startDate = this.formatDate(this.startDate)
+  if(this.endDate.toString().length < 2) this.endDate = "0"+this.endDate.toString()
+  this.endDate = "Mon Oct "+this.endDate+" 2022"
+  this.endDate = this.formatDate(this.endDate)
 }
 
 
@@ -366,3 +442,72 @@ appointDate()
 
 }
 }
+
+
+@Component({
+  selector: 'dialog-overview-example-dialog',
+  templateUrl: './dialog-overview-example-dialog.html',
+  styleUrls:['./app.component.css']
+})
+export class DialogOverviewExampleDialog implements OnInit {
+
+  name:string = ''
+  firstOption : number | string= 0
+  secondOption : number | string = 0
+  thirdOption : number  | string= 0
+  fourthOption : number  | string = 0
+
+  firstName : string = ""
+  secondName : string = ""
+  thirdName : string = ""
+  fourthName : string |null = null
+
+  
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewExampleDialog>,
+    @Inject(MAT_DIALOG_DATA) public data: DialogData,
+  ) {}
+
+
+
+  ngOnInit(): void {
+
+    this.firstOption = (this.data.value * 100 ).toPrecision(3)
+    this.secondOption = (0.79 * Number(this.firstOption)).toPrecision(3) 
+    this.thirdOption = (0.66 * Number(this.firstOption) ).toPrecision(3)
+    this.fourthOption = (0.52 * Number(this.firstOption)).toPrecision(3) 
+
+    if(this.data.chosen == 'trad') 
+    {
+      this.name = 'Traditional'
+      this.firstName = "ARIMA"
+      this.secondName = "SARIMA"
+      this.thirdName = "UCM"
+      this.fourthName = "WORK"
+    }
+    if(this.data.chosen == 'ml')
+    {
+      this.name = 'Machine Learning'
+      this.firstName = "Random Forest"
+      this.secondName = "Support Vector Machine"
+      this.thirdName = "XG Boost"
+    }
+    if(this.data.chosen == 'dl')
+    {
+      this.name = 'Deep Learning'
+      this.firstName = "CNN"
+      this.secondName = "RNN"
+      this.thirdName = "LSTM"
+    }
+    if(this.data.chosen == 'ensem')
+    {
+      this.name = 'Ensemble'
+      this.firstName = "ARIMA"
+      this.secondName = "Random Forest"
+      this.thirdName = "CNN"
+    }
+  }
+  
+}
+
