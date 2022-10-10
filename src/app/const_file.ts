@@ -63,7 +63,7 @@ export const ensemWeight : weightSchema | any =
 export const weeklyHist = [
   {
     "week": "05-10-2020",
-    "revenue": 1448217.689
+    "revenue": 1448217.689,
   },
   {
     "week": "12-10-2020",

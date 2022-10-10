@@ -76,7 +76,7 @@
       <mat-radio-group
       aria-labelledby="example-radio-group-label"
       class="radio-group"
-      [(ngModel)]="forecastedPeriod" (change)="forecastDate()">
+      [(ngModel)]="forecastedPeriod">
       <mat-radio-button class="radio-button" color="primary" *ngFor="let forecastPeriod of forecastPeriods" [value]="forecastPeriod.value">
         {{forecastPeriod.name}}
       </mat-radio-button>
@@ -86,7 +86,7 @@
   
     <!-- Datepicker -->
     <mat-form-field appearance="legacy" class="date-tweaks" (click)="picker.open()">
-      <mat-label style="color:white;">Enter a date range</mat-label>
+      <mat-label style="color:white;">Enter a Date Range</mat-label>
       <mat-date-range-input [formGroup]="dateRangeTrend" [rangePicker]="picker" [max]="today">
         <input matStartDate formControlName="startDate" placeholder="Start date">
         <input matEndDate formControlName="endDate" placeholder="End date" (dateChange)="changeBase()">
@@ -136,18 +136,22 @@
         <!-- Graph -->
         <mat-card style="margin-top:20px;">
           <div class="title-container">
-            <div style="display:flex;height:32px">
+            <div style="display:flex;height:32px;justify-content: space-between;">
 
               <!-- Weekly, Monthly, Yearly Buttons -->
               <mat-button-toggle-group  [(ngModel)]="selectedChartPeriod" #group (change)="[print(selectedChartPeriod),appointDate()]"> 
-                <mat-button-toggle matToolTip="Hourly" value="hourly" #hourly>H</mat-button-toggle>
-                <mat-button-toggle matToolTip="Daily" value="daily">D</mat-button-toggle>
-                <mat-button-toggle matToolTip="Weekly" value="weekly">W</mat-button-toggle>
+                <mat-button-toggle matToolTip="Hourly" value="hourly"  #hourly>H</mat-button-toggle>
+                <mat-button-toggle matToolTip="Daily" value="daily" [disabled]="forecastedPeriod == '2d'">D</mat-button-toggle>
+                <mat-button-toggle matToolTip="Weekly" value="weekly" [disabled]="forecastedPeriod == '2d' || forecastedPeriod =='2w'">W</mat-button-toggle>
+              </mat-button-toggle-group>
+
+              <mat-button-toggle-group  [(ngModel)]="chartType" (change)="changeChart()" #typeChart>  
+                <mat-button-toggle matToolTip="Currency" value="currency">$</mat-button-toggle>
+                <mat-button-toggle matToolTip="Units" value="units">U</mat-button-toggle>
               </mat-button-toggle-group>
             </div>
           </div>
           
-
           <div style="height:fit-content;margin-top:2%;">
             <div echarts [options]="chartOption" class="demo-chart"></div>
           </div>
@@ -166,7 +170,7 @@
               <div *ngIf="dateRangeTrend.value.startDate && dateRangeTrend.value.endDate"class="actual-heading" style="font-size:12px;">Historical Period</div>
               <div *ngIf="dateRangeTrend.value.startDate && dateRangeTrend.value.endDate" style="text-align: center;"><span style="margin-bottom: 4px;font-size:12px;font-family: 'Comfortaa';">{{formatDate(dateRangeTrend.value.startDate)}} - {{formatDate(dateRangeTrend.value.endDate)}}</span></div>
               <div *ngIf="startDate && endDate" class="actual-heading" style="font-size:12px;">Forecast Period</div>
-              <div *ngIf="startDate && endDate" style="text-align: center;"><span style="font-size:12px;font-family: 'Comfortaa';">{{startDate}} - {{endDate}}</span></div>
+              <div *ngIf="startDate && endDate" style="text-align: center;"><span style="font-size:12px;font-family: 'Comfortaa';">{{forecastedDateRange.value.startDate}} - {{forecastedDateRange.value.endDate}}</span></div>
             </div>
             <hr id="hr-tag">
           </ng-container>
@@ -307,3 +311,12 @@
   </main>
 
 </div>
+
+
+
+
+<!-- if forecast period :
+  2 days -> training period -- 1 week
+  2 Weeks -> training period -- 2 months
+  1 Month -> training period -- 1 Quarter
+  2 Months -> training period -- 2 Quarter -->
