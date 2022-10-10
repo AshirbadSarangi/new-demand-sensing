@@ -42,6 +42,8 @@ export class AppComponent implements DoCheck{
   hourlyHist = hourlyHist
   hourlyForecast = hourlyForecast
 
+  chartType:string = "currency"
+
   promotionWt = false;
   priceWt = false;
   marketingWt = false;
@@ -149,6 +151,75 @@ export class AppComponent implements DoCheck{
     ],
   };
 
+  chartOptionUnitsWeekly: EChartsOption = {
+    tooltip:{},
+    xAxis: {
+      type: 'category',
+      data: this.weeklyHist.map(c => c.week).concat(this.weeklyForecast.map(c => c.week)),
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        data: this.weeklyHist.map(c => c["revenue"]/1000),
+        type: 'line',
+      },
+      {
+        color:"#53D6C4",
+        data: Array(this.weeklyHist.length - 1 ).concat(this.weeklyForecast.map(c => c["revenue"]/1000)),
+        type: 'line',
+        areaStyle: {}
+      },
+    ],
+  };
+
+  chartOptionUnitsDaily: EChartsOption = {
+    tooltip:{},
+    xAxis: {
+      type: 'category',
+      data: this.dailyHist.map(c => c.daily).concat(this.dailyForecast.map(c => c.daily)),
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        data: this.dailyHist.map(c => c["revenue"]/1000),
+        type: 'line',
+      },
+      {
+        color:"#53D6C4",
+        data: Array(this.dailyHist.length - 1 ).concat(this.dailyForecast.map(c => (c["revenue"]+1)/1000)),
+        type: 'line',
+        areaStyle : {}
+      },
+    ],
+  };
+
+  chartOptionUnitsHourly: EChartsOption = {
+    tooltip:{},
+    xAxis: {
+      type: 'category',
+      data: this.hourlyHist.map(c => c.hourly).concat(this.hourlyForecast.map(c => c.hourly)),
+    },
+    yAxis: {
+      type: 'value',
+    },
+    series: [
+      {
+        data: this.hourlyHist.map(c => (c["revenue"])/1000),
+        type: 'line',
+      },
+      {
+        color:"#53D6C4",
+        data: Array(this.hourlyHist.length - 1).fill('-').concat(this.hourlyForecast.map(c => ((c["revenue"]+10)/1000).toString())),
+        type: 'line',
+        areaStyle:{}
+      }
+    ],
+  };
+
 
   constructor
   (
@@ -174,15 +245,12 @@ export class AppComponent implements DoCheck{
     }
   )
 
-  dateRangeTable = this._formBuilder.group
-  (
-    {
-      startDate : [],
-      endDate:[]
-    }
-  )
+  trainingDateRange = this._formBuilder.group( { startDate : ['',], endDate : ['',] } )
+  forecastedDateRange = this._formBuilder.group( { startDate : ['',], endDate : ['',] } )
 
-    changeBase(): void {
+
+    changeBase(): void 
+    {
 
       this.tradBase = 0.5;
       this.mlBase = 0.65;
@@ -208,9 +276,38 @@ export class AppComponent implements DoCheck{
         +  ensemWeight['price'] 
       }
 
+      let startDate = new Date(this.dateRangeTrend.value.startDate || "")
+      let endDate = new Date(this.dateRangeTrend.value.endDate || "")
+
+      this.startDate = this.formatDate(startDate.toDateString())
+      this.endDate = this.formatDate(endDate.toDateString())
+
+      switch(this.forecastedPeriod) 
+      {
+        case '2d' : this.assignTrainingDate(7,'d');break;
+        case '2w' : this.assignTrainingDate(14,'d');break;
+        case '1m' : this.assignTrainingDate(3,'m');break;
+        case '2m' : this.assignTrainingDate(6,'m');break;
+      }
+
+      this.forecastDate()
+
     }
 
-  formatDate(passedDate:string|undefined|null)
+    assignTrainingDate(stepSize:number, stepType:string)
+    {
+      let startDate = new Date(this.endDate)
+      let endDate = new Date(this.endDate)
+      if (stepType == 'd')
+        startDate.setDate((startDate).getDate() - stepSize)
+
+      else if (stepType == 'm')
+        startDate.setMonth((startDate).getMonth() - stepSize )
+
+      this.trainingDateRange.patchValue({startDate:startDate.toDateString(), endDate:endDate.toDateString()})
+    }
+
+  formatDate(passedDate:any)
   {
     if(passedDate)  return (passedDate.toString().slice(4,15))
     else return ;
@@ -260,8 +357,9 @@ export class AppComponent implements DoCheck{
   forecastPeriods= 
   [
     {name :'Two Days', value: '2d'},
-    {name :'One Week', value :'1w'},
     {name :'Two Week', value :'2w'},
+    {name :'One Month', value :'1m'},
+    {name :'Two Months', value :'2m'},
   ]
 
 showFiller = false;
@@ -315,15 +413,42 @@ ngDoCheck()
 
 forecastDate()
 {
-  this.startDate = new Date()
-  if(this.forecastedPeriod == '2d') this.endDate = new Date().getDate() + 2
-  if(this.forecastedPeriod == '1w') this.endDate = new Date().getDate() + 7
-  if(this.forecastedPeriod == '2w') this.endDate = new Date().getDate() + 14
+  let startDate = new Date(this.endDate)
+  let endDate = new Date(this.endDate)
 
-  this.startDate = this.formatDate(this.startDate)
-  if(this.endDate.toString().length < 2) this.endDate = "0"+this.endDate.toString()
-  this.endDate = "Mon Oct "+this.endDate+" 2022"
-  this.endDate = this.formatDate(this.endDate)
+  let findDate = (date:Date,stepSize:number, stepType:string) => 
+  {
+    if (stepType == 'd')
+      date.setDate((date).getDate() + stepSize)
+    else if (stepType == 'm')
+      date.setMonth((date).getMonth() + stepSize )
+    return date
+  }
+
+  startDate = findDate(startDate,1,'d')
+
+  switch(this.forecastedPeriod)
+  {
+    case '2d': endDate = findDate(endDate,2,'d');break;
+    case '2w': endDate = findDate(endDate,7,'d');break;
+    case '1m': endDate = findDate(endDate,1,'m');break;
+    case '2m': endDate = findDate(endDate,2,'m');break;
+  }
+
+  // if(this.forecastedPeriod == '2d') this.endDate = new Date().getDate() + 2
+  // if(this.forecastedPeriod == '2w') this.endDate = new Date().getDate() + 7
+  // if(this.forecastedPeriod == '1m') this.endDate = new Date().getDate() + 14
+  // if(this.forecastedPeriod == '2m') this.endDate = new Date().getDate() + 14
+
+  // this.startDate = this.formatDate(this.startDate)
+  // if(this.endDate.toString().length < 2) this.endDate = "0"+this.endDate.toString()
+  // this.endDate = "Mon Oct "+this.endDate+" 2022"
+  // this.endDate = this.formatDate(this.endDate)
+
+  this.forecastedDateRange.patchValue({startDate:this.formatDate(startDate) , endDate:this.formatDate(endDate) ,}) 
+
+  
+
 }
 
 
@@ -366,7 +491,10 @@ appointDate()
   let answerForecast = 0
   if(this.selectedChartPeriod == 'hourly') 
   {
+    if(this.chartType == 'currency')
     this.chartOption = this.chartOptionHourly
+    if(this.chartType == 'units')
+    this.chartOption = this.chartOptionUnitsHourly
     this.salesIncreament = 1.32;
     this.impressionsIncreament = 4.38;
     this.revenuesIncreament = 1.37;
@@ -383,7 +511,10 @@ appointDate()
 
   if(this.selectedChartPeriod == 'daily') 
   {
+    if(this.chartType == 'currency')
     this.chartOption = this.chartOptionDaily
+    if(this.chartType == 'units')
+    this.chartOption = this.chartOptionUnitsDaily
     this.salesIncreament = 3.32;
     this.impressionsIncreament = 1.38;
     this.revenuesIncreament = 3.37;
@@ -401,7 +532,10 @@ appointDate()
 
   if(this.selectedChartPeriod == 'weekly') 
   {
+    if(this.chartType == 'currency')
     this.chartOption = this.chartOptionWeekly
+    if(this.chartType == 'units')
+    this.chartOption = this.chartOptionUnitsWeekly
     this.salesIncreament = 2.32;
     this.impressionsIncreament = 5.38;
     this.revenuesIncreament = 5.37;
@@ -438,10 +572,26 @@ appointDate()
     this.prevTime = "(Oct 2021)"
     this.presTime = "(Oct 2022)"
   }
+}
+
+changeChart()
+{
+  // console.log(this.chartType)
 
 
 }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 @Component({
